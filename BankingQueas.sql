@@ -740,3 +740,34 @@ where Accounttype = "Savings" AND branchid = 1 or branchid = 3;
 select branchid, avg(balance) as avgbalance from accounts
 where accounttype = "Current"
 group by branchid;
+
+-- Total and average balance per AccountType. How are NULL types and NULL balances treated?
+SELECT AccountType, SUM(Balance) AS Total, AVG(Balance) AS Average
+FROM accounts GROUP BY AccountType;
+
+-- Top 3 accounts by balance. Show how NULLs sort in ASC vs DESC.
+SELECT * FROM accounts ORDER BY Balance DESC LIMIT 3;
+SELECT * FROM accounts ORDER BY Balance ASC;
+
+-- JOIN FUNCTION IN SQL --
+--  A JOIN COMBINES RELATED ROWS FROM DIFFERENT TABLE BASED ON A COMMON COLUMN
+
+-- 1. INNNER JOIN  ---> IT MATHES THE ROWS THAT EXIST IN THE BOTH TABLE
+-- Q. FININD ALL COUSTOMERS WHO HAVE ACCOUNTS AND SHOW THEIR BALANCE.
+SELECT * FROM CUSTOMERS;
+SELECT * FROM ACCOUNTS;
+select * from loans;
+SELECT c.CustomerID, c.Firstname, c.Lastname, a.Balance
+FROM customers c
+INNER JOIN Accounts a
+on c.CustomerID = a.CustomerID;
+
+-- final all cosutomers who have loans
+select * from loans;
+
+SELECT c.CustomerID, c.Firstname, c.Lastname, c.Phone, l.LoanAmount
+FROM customers c
+INNER JOIN loans l
+on c.CustomerID = l.CustomerID;
+
+
