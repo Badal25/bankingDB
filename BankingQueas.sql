@@ -770,4 +770,126 @@ FROM customers c
 INNER JOIN loans l
 on c.CustomerID = l.CustomerID;
 
+-- Get Customerid, Customer name, account type, balance, branch name from related tables
+SELECT 
+    c.CustomerID,
+    CONCAT_WS(' ', c.firstname, c.lastname) As full_name,
+    a.AccountType,
+    a.Balance,
+    b.BranchName
+FROM
+    customers c
+        INNER JOIN
+    accounts a ON c.CustomerID = a.CustomerID
+        INNER JOIN
+    branches b ON a.BranchID = b.BranchID;
+    
+    
+    -- left JOin ---
+    
+    -- return all rows from the left table, and matched rows from the right
+    -- get data from alll customes and show their balance.
+    
+    SELECT c.CustomerID, c.Firstname, c.Lastname, a.accounttype,a.Balance
+FROM customers c
+left JOIN Accounts a
+on c.CustomerID = a.CustomerID;
+
+-- find the customers who are registered but dont have accounttype and blance;
+ SELECT 
+    c.CustomerID,
+    c.Firstname,
+    c.Lastname,
+    a.accounttype,
+    a.Balance
+FROM
+    customers c
+        LEFT JOIN
+    Accounts a ON c.CustomerID = a.CustomerID
+WHERE
+    a.accounttype IS NULL
+        AND a.balance IS NULL;
+
+-- Right JOin --
+SELECT 
+    c.CustomerID,
+    c.Firstname,
+    c.Lastname,
+    a.accounttype,
+    a.Balance
+FROM
+    customers c
+        right JOIN
+    Accounts a ON c.CustomerID = a.CustomerID;
+    
+    -- UNION join ---
+    
+    SELECT  * FROM customers c
+LEFT JOIN Accounts a 
+ON c.CustomerID = a.CustomerID
+    UNION
+    SELECT * FROM customers c 
+right JOIN Accounts a 
+ON c.CustomerID = a.CustomerID;
+
+-- cross join
+select * from customers c
+cross join accounts a;
+
+-- find the number of accounts held by each customers;
+SELECT c.customerid, c.Firstname,c.Lastname, COUNT(a.AccountType) AS total 
+FROM customers c
+left JOIN accounts a
+ON c.customerid = a.customerid
+GROUP BY c.customerid;
+
+-- find the number of customers for each accounttype
+-- without join 
+SELECT AccountType, COUNT(DISTINCT customerid) AS total_customers
+FROM accounts
+GROUP BY AccountType;
+
+-- using join 
+select a. AccountType, count(c.customerid) as Total_customers
+from customers c
+join accounts a
+on c.CustomerID = a.CustomerID
+group by a.AccountType;
+
+
+-- find the customer who has more than one accounts
+SELECT c.customerid, c.Firstname,c.Lastname, COUNT(a.AccountType) AS total 
+FROM customers c
+left JOIN accounts a
+ON c.customerid = a.customerid
+GROUP BY c.customerid
+having total > 1;
+
+-- find customers who have never perfomed a transaction
+select c.CustomerID, c.firstname, c.lastname, a.AccountID, a.AccountType
+from customers c
+right join accounts a
+on c.CustomerID = a.CustomerID
+left join transactions t
+on a.AccountID = t.AccountID
+where t.TransactionID is null;
+
+
+
+
+
+
+select * from accounts;
+select * from customers;
+select * from  transactions;
+
+
+
+
+SELECT  * FROM accounts;
+SELECT * FROM customers;
+SELECT * FROM  branches;
+    
+    
+
 
